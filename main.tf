@@ -28,11 +28,19 @@ data "tfe_organization" "org" {
   #email = var.organization_email
 }
 
-resource "tfe_workspace" "workspace" {
-  count        = length(var.workspace_names)
-  name         = var.workspace_names[count.index]
+resource "tfe_project" "projects" {
+  for_each     = { for project in var.projects : project.name => project }
+  name         = each.value.name
   organization = data.tfe_organization.org.name
 }
+
+resource "tfe_workspace" "workspaces" {
+  for_each     = { for workspace in local.flattened_workspaces : "${workspace.project_name}.${workspace.name}" => workspace }
+  name         = each.value.name
+  organization = data.tfe_organization.org.name
+  project_id   = tfe_project.projects[each.value.project_name].id
+}
+
 
 # variables.tf
 
@@ -46,9 +54,12 @@ variable "organization_email" {
   type        = string
 }
 
-variable "workspace_names" {
-  description = "List of workspace names to create"
-  type        = list(string)
+variable "projects" {
+  description = "List of projects and their workspaces"
+  type = list(object({
+    name       = string
+    workspaces = list(string)
+  }))
 }
 
 variable "tfe_token" {
