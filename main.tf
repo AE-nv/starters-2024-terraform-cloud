@@ -21,6 +21,7 @@ data "tfe_organization" "org" {
 }
 
 provider "tfe" {
+token = "4E1mJJ4olyOKYQ.atlasv1.0ysK86teKEyxfAHr9Yz37IN5TIdpFbMzp65wIdIy9cOk8031yEQwKngBl2BAxAru26s"
 }
 
 # resource "tfe_project" "projects" {
