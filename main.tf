@@ -21,7 +21,6 @@ data "tfe_organization" "org" {
 }
 
 provider "tfe" {
-  token = ""
 }
 
 # resource "tfe_project" "projects" {
