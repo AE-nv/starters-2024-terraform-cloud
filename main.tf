@@ -4,7 +4,7 @@ terraform {
   required_providers {
     tfe = {
       source  = "hashicorp/tfe"
-      version = "~> 0.42.0"
+      version = "0.58.1"
     }
   }
 
@@ -23,15 +23,15 @@ provider "tfe" {
   token = var.tfe_token
 }
 
-data "tfe_organization" "foo" {
+data "tfe_organization" "org" {
   name  = var.organization_name
-  email = var.organization_email
+  #email = var.organization_email
 }
 
 resource "tfe_workspace" "workspace" {
   count        = length(var.workspace_names)
   name         = var.workspace_names[count.index]
-  organization = tfe_organization.org.name
+  organization = data.tfe_organization.org.name
 }
 
 # variables.tf
