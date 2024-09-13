@@ -16,12 +16,6 @@ terraform {
   }
 }
 
-
-provider "tfe" {
-  # Configure the provider here (e.g., with a token)
-  token = var.tfe_token
-}
-
 data "tfe_organization" "org" {
   name = var.organization_name
   #email = var.organization_email
@@ -59,10 +53,4 @@ variable "projects" {
     name       = string
     workspaces = list(string)
   }))
-}
-
-variable "tfe_token" {
-  description = "token to access TF enterprise"
-  type        = string
-  sensitive   = true
 }
