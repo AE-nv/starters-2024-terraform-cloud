@@ -1,5 +1,3 @@
-# main.tf
-
 terraform {
   required_providers {
     tfe = {
@@ -11,14 +9,15 @@ terraform {
   cloud {
     organization = "AE_nv"
     workspaces {
-      name = "AE_starters_remote_backend"
+      name = "AE_starters_workspace_remote_backend"
+      project = "AE_starters_project_tf_backend"
     }
   }
+
 }
 
 data "tfe_organization" "org" {
   name = var.organization_name
-  #email = var.organization_email
 }
 
 resource "tfe_project" "projects" {
@@ -32,25 +31,4 @@ resource "tfe_workspace" "workspaces" {
   name         = each.value.name
   organization = data.tfe_organization.org.name
   project_id   = tfe_project.projects[each.value.project_name].id
-}
-
-
-# variables.tf
-
-variable "organization_name" {
-  description = "Name of the Terraform Cloud organization"
-  type        = string
-}
-
-variable "organization_email" {
-  description = "Email for the Terraform Cloud organization"
-  type        = string
-}
-
-variable "projects" {
-  description = "List of projects and their workspaces"
-  type = list(object({
-    name       = string
-    workspaces = list(string)
-  }))
 }
