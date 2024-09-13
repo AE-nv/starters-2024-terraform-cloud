@@ -9,21 +9,21 @@ terraform {
   }
 
 
-#   backend "remote" {
-#     organization = "my-org"
-#     workspaces {
-#       name = "terraform-cloud-workspace"
-#     }
-#   }
+  #   backend "remote" {
+  #     organization = "my-org"
+  #     workspaces {
+  #       name = "terraform-cloud-workspace"
+  #     }
+  #   }
 }
 
 
 provider "tfe" {
   # Configure the provider here (e.g., with a token)
-  # token = var.tfe_token
+  token = var.tfe_token
 }
 
-resource "tfe_organization" "org" {
+data "tfe_organization" "foo" {
   name  = var.organization_name
   email = var.organization_email
 }
@@ -51,8 +51,8 @@ variable "workspace_names" {
   type        = list(string)
 }
 
-# terraform.tfvars
-
-organization_name  = "my-org"
-organization_email = "admin@example.com"
-workspace_names    = ["dev", "staging", "prod"]
+variable "tfe_token" {
+  description = "token to access TF enterprise"
+  type        = string
+  sensitive   = true
+}
