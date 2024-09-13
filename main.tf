@@ -7,14 +7,13 @@ terraform {
       version = "0.58.1"
     }
   }
-
-
-  #   backend "remote" {
-  #     organization = "my-org"
-  #     workspaces {
-  #       name = "terraform-cloud-workspace"
-  #     }
-  #   }
+  
+  cloud {
+    organization = "AE_nv"
+    workspaces {
+      name = "AE_starters_remote_backend"
+    }
+  }
 }
 
 
@@ -24,7 +23,7 @@ provider "tfe" {
 }
 
 data "tfe_organization" "org" {
-  name  = var.organization_name
+  name = var.organization_name
   #email = var.organization_email
 }
 
