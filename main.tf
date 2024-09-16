@@ -6,56 +6,28 @@ terraform {
     }
   }
 
-  cloud {
-    organization = "AE_nv"
-    workspaces {
-      name    = "AE_starters_workspace_remote_backend"
-      project = "AE_starters_project_tf_backend"
-    }
+  backend "azurerm" {
+    resource_group_name  = "rg-tfstate-weu-01"
+    storage_account_name = "sttfstateweu01"
+    container_name       = "cont-tfstate-weu-01"
+    key                  = "terraform.tfstate"
+    use_azuread_auth     = true
   }
-
 }
 
 data "tfe_organization" "org" {
-  name = var.organization_name
+  name = "AE_nv"
 }
 
-provider "tfe" {
-token = "4E1mJJ4olyOKYQ.atlasv1.0ysK86teKEyxfAHr9Yz37IN5TIdpFbMzp65wIdIy9cOk8031yEQwKngBl2BAxAru26s"
-}
-
-# resource "tfe_project" "projects" {
-#   for_each     = { for project in var.projects : project.name => project }
-#   name         = each.value.name
-#   organization = data.tfe_organization.org.name
-# }
-
-# resource "tfe_workspace" "workspaces" {
-#   for_each     = { for workspace in local.flattened_workspaces : "${workspace.project_name}.${workspace.name}" => workspace }
-#   name         = each.value.name
-#   organization = data.tfe_organization.org.name
-#   project_id   = tfe_project.projects[each.value.project_name].id
-# }
-
-resource "tfe_project" "project" {
-  name         = "AE_starters_project_iac"
-  organization = var.organization_name
-}
-
-resource "tfe_workspace" "workspace_1" {
-  name         = "AE_starters_workspace_steven"
+resource "tfe_project" "projects" {
+  for_each     = { for project in var.projects : project.name => project }
+  name         = each.value.name
   organization = data.tfe_organization.org.name
-  project_id   = tfe_project.project.id
 }
 
-resource "tfe_workspace" "workspace_2" {
-  name         = "AE_starters_workspace_pieterjan"
+resource "tfe_workspace" "workspaces" {
+  for_each     = { for workspace in local.flattened_workspaces : "${workspace.project_name}.${workspace.name}" => workspace }
+  name         = each.value.name
   organization = data.tfe_organization.org.name
-  project_id   = tfe_project.project.id
-}
-
-resource "tfe_workspace" "workspace_3" {
-  name         = "AE_starters_workspace_stephanie"
-  organization = data.tfe_organization.org.name
-  project_id   = tfe_project.project.id
+  project_id   = tfe_project.projects[each.value.project_name].id
 }
