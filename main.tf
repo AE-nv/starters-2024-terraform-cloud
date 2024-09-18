@@ -7,9 +7,9 @@ terraform {
   }
 
   backend "azurerm" {
-    resource_group_name  = "rg-tfstate-weu-01"
-    storage_account_name = "sttfstateweu01"
-    container_name       = "cont-tfstate-weu-01"
+    resource_group_name  = "rg-starters-tfstate-weu-01"
+    storage_account_name = "ststarterstfstateweu01"
+    container_name       = "cont-starters-tfstate-weu-01"
     key                  = "terraform.tfstate"
     use_azuread_auth     = true
   }
