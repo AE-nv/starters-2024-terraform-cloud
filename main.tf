@@ -28,6 +28,7 @@ resource "tfe_project" "projects" {
 resource "tfe_workspace" "workspaces" {
   for_each     = { for workspace in local.flattened_workspaces : "${workspace.project_name}.${workspace.name}" => workspace }
   name         = each.value.name
+  tag_names    = each.value.tag_names
   organization = data.tfe_organization.org.name
   project_id   = tfe_project.projects[each.value.project_name].id
 }
