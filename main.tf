@@ -1,3 +1,4 @@
+
 terraform {
   required_providers {
     tfe = {
@@ -19,16 +20,28 @@ data "tfe_organization" "org" {
   name = "AE_nv"
 }
 
+data "tfe_variable_set" "tfe_variable_sets" {
+  for_each     = var.variable_set_names
+  name         = each.value
+  organization = data.tfe_organization.org.name
+}
+
 resource "tfe_project" "starters_project" {
   name         = "AE_starters_project_iac"
   organization = data.tfe_organization.org.name
 }
 
 module "participant_workspaces" {
-  source        = "./participant_workspace"
-  for_each      = var.participants
+  source   = "./participant_workspace"
+  for_each = var.participants
 
   participant_name = each.value
-  organization  = data.tfe_organization.org.name
-  project       = resource.tfe_project.starters_project.id
+  organization     = data.tfe_organization.org.name
+  project          = resource.tfe_project.starters_project.id
+}
+
+resource "tfe_project_variable_set" "link_variable_sets" {
+  for_each        = data.tfe_variable_set.tfe_variable_sets
+  project_id      = resource.tfe_project.starters_project.id
+  variable_set_id = each.value.id
 }
