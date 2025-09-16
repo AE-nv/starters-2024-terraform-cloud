@@ -26,6 +26,11 @@ data "tfe_variable_set" "tfe_variable_sets" {
   organization = data.tfe_organization.org.name
 }
 
+data "tfe_team" "owners" {
+  name         = "owners"
+  organization = data.tfe_organization.org.name
+}
+
 resource "tfe_project" "starters_project" {
   name         = "AE_starters_project_iac"
   organization = data.tfe_organization.org.name
@@ -38,6 +43,7 @@ module "participant_workspaces" {
   participant_name = each.value
   organization     = data.tfe_organization.org.name
   project          = resource.tfe_project.starters_project.id
+  team_id          = data.tfe_team.owners.id
 }
 
 resource "tfe_project_variable_set" "link_variable_sets" {
