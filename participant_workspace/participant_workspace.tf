@@ -32,11 +32,27 @@ resource "tfe_workspace" "dev" {
   tag_names    = [local.first_name, "iac_intro_workshop"]
 }
 
+resource "tfe_variable" "dev_environment" {
+  key          = "environment"
+  value        = "dev"
+  category     = "terraform"
+  workspace_id = tfe_workspace.dev.id
+  sensitive    = false
+}
+
 resource "tfe_workspace" "pro" {
   name         = "${local.sanitized_name}_pro"
   organization = var.organization
   project_id   = var.project
   tag_names    = [local.first_name, "iac_intro_workshop"]
+}
+
+resource "tfe_variable" "pro_environment" {
+  key          = "environment"
+  value        = "pro"
+  category     = "terraform"
+  workspace_id = tfe_workspace.pro.id
+  sensitive    = false
 }
 
 resource "tfe_organization_membership" "membership" {
