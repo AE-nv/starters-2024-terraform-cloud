@@ -21,22 +21,22 @@ variable "participant_name" {
 locals {
   sanitized_name = replace(var.participant_name, " ", "_")
   _split_name    = split(" ", var.participant_name)
-  first_name     = local._split_name[0]
-  last_name      = join("", slice(local._split_name, 1, length(local._split_name)))
+  first_name     = lower(local._split_name[0])
+  last_name      = lower(join("", slice(local._split_name, 1, length(local._split_name))))
 }
 
 resource "tfe_workspace" "dev" {
   name         = "${local.sanitized_name}_dev"
   organization = var.organization
   project_id   = var.project
-  tag_names    = [lower(local.first_name)]
+  tag_names    = [local.first_name, "iac_intro_workshop"]
 }
 
 resource "tfe_workspace" "pro" {
   name         = "${local.sanitized_name}_pro"
   organization = var.organization
   project_id   = var.project
-  tag_names    = [lower(local.first_name)]
+  tag_names    = [local.first_name, "iac_intro_workshop"]
 }
 
 resource "tfe_organization_membership" "membership" {

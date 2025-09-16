@@ -32,7 +32,7 @@ data "tfe_team" "owners" {
 }
 
 resource "tfe_project" "starters_project" {
-  name         = "AE_starters_project_iac"
+  name         = "AE_IAC_Intro_Workshop"
   organization = data.tfe_organization.org.name
 }
 
