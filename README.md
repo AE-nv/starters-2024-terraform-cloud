@@ -1,4 +1,5 @@
-# starters-2024-terraform-cloud
+# Intro to Terraform workshop
+
 Repo will contain code to manage TF Cloud projects and workspaces
 
 ## Requirements

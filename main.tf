@@ -19,16 +19,16 @@ data "tfe_organization" "org" {
   name = "AE_nv"
 }
 
-resource "tfe_project" "projects" {
-  for_each     = { for project in var.projects : project.name => project }
-  name         = each.value.name
+resource "tfe_project" "starters_project" {
+  name         = "AE_starters_project_iac"
   organization = data.tfe_organization.org.name
 }
 
-resource "tfe_workspace" "workspaces" {
-  for_each     = { for workspace in local.flattened_workspaces : "${workspace.project_name}.${workspace.name}" => workspace }
-  name         = each.value.name
-  tag_names    = each.value.tag_names
-  organization = data.tfe_organization.org.name
-  project_id   = tfe_project.projects[each.value.project_name].id
+module "participant_workspaces" {
+  source        = "./participant_workspace"
+  for_each      = var.participants
+
+  participant_name = each.value
+  organization  = data.tfe_organization.org.name
+  project       = resource.tfe_project.starters_project.id
 }
