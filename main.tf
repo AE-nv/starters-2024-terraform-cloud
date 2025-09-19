@@ -43,6 +43,15 @@ module "participant_workspaces" {
   participant_name = each.value
   organization     = data.tfe_organization.org.name
   project          = resource.tfe_project.starters_project.id
+}
+
+module "participant_memberships" {
+  source = "./participant_membership"
+
+  for_each = var.participants
+
+  participant_name = each.value
+  organization     = data.tfe_organization.org.name
   team_id          = data.tfe_team.owners.id
 }
 
