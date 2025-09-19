@@ -7,10 +7,11 @@ participants = [
   "Seppe Vanswegenove",
   "Elias Dams",
   "Xander Corvers",
-  "Dries Cornelissen"
+  "Dries Cornelissen",
+  "Simon Massie",
 ]
 
-  variable_set_names = [
-    "Mailjet settings",
-    "Iac-intro-workshop-service-principal"
-  ]
+variable_set_names = [
+  "Mailjet settings",
+  "Iac-intro-workshop-service-principal"
+]
