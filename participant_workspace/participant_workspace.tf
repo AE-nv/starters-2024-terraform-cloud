@@ -24,6 +24,7 @@ resource "tfe_workspace" "dev" {
   name         = "${local.sanitized_name}_dev"
   organization = var.organization
   project_id   = var.project
+  force_delete = true
   tag_names    = [local.first_name, "iac_intro_workshop"]
 }
 
@@ -39,6 +40,7 @@ resource "tfe_workspace" "pro" {
   name         = "${local.sanitized_name}_pro"
   organization = var.organization
   project_id   = var.project
+  force_delete = true
   tag_names    = [local.first_name, "iac_intro_workshop"]
 }
 
